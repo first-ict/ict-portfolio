@@ -1,5 +1,7 @@
-<?php
 
+<?php
+use App\Models\Slider;
+use App\Http\Controllers\Admin\SliderController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -17,12 +19,8 @@ use Illuminate\Http\Request;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get("/file-upload", function(){
-    return view('file');
-});
-Route::post('/file', function(Request $request){
-    // testing34.jpg
-    // 'testing'.rand(0, 88). '.'.$request->file('image')->clientExtension()
-    $name = $request->file('image')->storeAs('public/public_testing', 'helloworld'.rand(0, 88). '.'.$request->file('image')->clientExtension());
-    dd($name);
+
+Route::post('/slider', function (Request $request) {
+    $filename = time()."_".$request->file('image')->getClientOriginalName();
+
 });

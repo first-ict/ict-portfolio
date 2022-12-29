@@ -21,6 +21,7 @@ Route::apiResource('sliders', SliderController::class);
 // Api Resource
 // Eg. Route::apiResource('categories', CategoryController::class);
 
+
 // get - categories - index()
 // post - categories - store()
 // get - categories/{category} - show()
