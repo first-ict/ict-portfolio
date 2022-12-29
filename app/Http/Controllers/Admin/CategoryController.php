@@ -34,7 +34,8 @@ class CategoryController extends Controller
 
         return response()->json([
             "condition" => true,
-            "message" => "The category has been created successfully."
+            "message" => "The category has been created successfully.",
+            "data" => $category
         ] , 200);
     }
 
@@ -54,6 +55,7 @@ class CategoryController extends Controller
 
     public function update(Request $request , $slug)
     {
+
         $request->validate([
             'name' => 'required',
             'status' => 'required'
@@ -66,6 +68,7 @@ class CategoryController extends Controller
             $category->name = $request->name;
             $category->slug = $slug;
             $category->order_by = rand(0 , 10);
+
             if ($request->status == 'true') {
                 $category->status = true;
             }
@@ -82,7 +85,7 @@ class CategoryController extends Controller
             ] , 200);
         }
         else{
-            return 'error';
+            return 'Error! Data not found.';
         }
     }
 
