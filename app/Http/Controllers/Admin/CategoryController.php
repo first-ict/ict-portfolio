@@ -2,100 +2,88 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Support\Str;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\CategoryResource;
 use App\Models\Category;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redis;
+use App\Http\Controllers\BaseController;
+use App\Http\Resources\CategoryResource;
+use Exception;
+use Illuminate\Support\Facades\Validator;
 
-class CategoryController extends Controller
+class CategoryController extends BaseController
 {
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required',
             'status' => 'required'
         ]);
+        if ($validator->fails()) {
+            return $this->error($validator->errors(), 403);
+        }
 
         $category = new Category();
-        $slug = Str::of($request->name)->slug('-');
         $category->name = $request->name;
-        $category->slug = $slug;
         $category->order_by = rand(0 , 10);
-        if ($request->status == 'true') {
-            $category->status = true;
-        }
-        else{
-            $category->status = false;
-        }
+        $category->status = (bool)$request->status;
 
         $category->save();
 
-        return response()->json([
-            "condition" => true,
-            "message" => "The category has been created successfully.",
-            "data" => $category
-        ] , 200);
+        return $this->success(new CategoryResource($category));
     }
 
     public function index()
     {
-        return CategoryResource::collection(Category::all());
+            return $this->success(CategoryResource::collection(Category::all()));
     }
 
     public function show($slug)
     {
-        $category = Category::where('slug' , $slug)->first();
-        return response()->json([
-            "condition" => true,
-            "data" => $category
-        ] , 200);
+        try {
+            $category = Category::where('slug' , $slug)->firstOrFail();
+        } catch (Exception $e){
+            return $this->error(["message"=> $e->getMessage()], 404);
+        }
+        $category = new CategoryResource(Category::where('slug' , $slug)->first());
+        return $this->success($category);
     }
 
     public function update(Request $request , $slug)
     {
 
-        $request->validate([
-            'name' => 'required',
-            'status' => 'required'
+        $validator = Validator::make($request->all(), [
+            'name' => 'string',
+            'status' => 'boolean'
         ]);
+        // return request()->all();
+        if ($validator->fails()) {
+            return $this->error($validator->errors(), 403);
+        }
 
         $category = Category::where('slug' , $slug)->first();
 
         if ($category) {
             $slug = Str::of($request->name)->slug('-');
-            $category->name = $request->name;
-            $category->slug = $slug;
-            $category->order_by = rand(0 , 10);
+            $category->update($request->all());
 
-            if ($request->status == 'true') {
-                $category->status = true;
-            }
-            else{
-                $category->status = false;
-            }
-
-            $category->update();
-
-            return response()->json([
-                "condition" => true,
-                "message" => "The category has been updated successfully.",
-                "data" => $category
-            ] , 200);
+            // $category->save();
+            return $this->success(new CategoryResource($category));
         }
         else{
-            return 'Error! Data not found.';
+            return $this->error(['message'=> "Category not found", 404]);
         }
     }
 
     public function destroy($slug)
     {
-        $category = Category::where('slug' , $slug)->first();
+        try {
+            $category = Category::where('slug' , $slug)->firstOrFail();
+        } catch (Exception $e){
+            return $this->error(["message"=> $e->getMessage()], 404);
+        }
         $category->delete();
-        return response()->json([
-            "condition" => true,
-            "message" => "The category has been deleted successfully.",
-        ] , 200);
+        return $this->response(null, [], 204, true);
     }
 }

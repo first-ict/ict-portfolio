@@ -19,6 +19,9 @@ use Illuminate\Http\Request;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/id', function(){
+    return session()->getId();
+});
 
 Route::post('/slider', function (Request $request) {
     $filename = time()."_".$request->file('image')->getClientOriginalName();
