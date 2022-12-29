@@ -11,7 +11,6 @@ use App\Http\Controllers\Admin\SliderController;
 // Zwe Zar Ni
 Route::apiResource('categories', CategoryController::class);
 
-
 // Naing Htet Htoo
 Route::apiResource('contents', ContentController::class);
 
