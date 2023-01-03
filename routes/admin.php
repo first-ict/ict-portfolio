@@ -5,18 +5,18 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContentController;
 use App\Http\Controllers\Admin\SliderController;
 
-// CRUD
 
 
-// Zwe Zar Ni
-Route::apiResource('categories', CategoryController::class);
+    // Zwe Zar Ni
+    Route::apiResource('categories', CategoryController::class);
 
 
-// Naing Htet Htoo
-Route::apiResource('contents', ContentController::class);
+    // Naing Htet Htoo
+    Route::apiResource('contents', ContentController::class);
 
-// Mratt Kyaw Thu
-Route::apiResource('sliders', SliderController::class);
+    // Mratt Kyaw Thu
+    Route::apiResource('sliders', SliderController::class);
+
 
 
 // Api Resource
