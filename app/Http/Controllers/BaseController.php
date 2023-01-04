@@ -9,7 +9,7 @@ class BaseController extends Controller
 {
     public function success ($data)
     {
-        return $data->additional(['condition'=> true]);
+        return $data->additional(['condition' => true]);
     }
 
     public function error($errors=[],$code=404)
@@ -25,20 +25,5 @@ class BaseController extends Controller
             "condition"=>$condition,
         ],$code);
     }
-
-
-    public function validator($data=[])
-    {
-
-        $confirm = Validator::make($data, [
-             'image' => 'required',
-             'order_by' => 'required',
-             'status' => 'required',
-        ]);
-
-        return $confirm;
-
-    }
-
     
 }

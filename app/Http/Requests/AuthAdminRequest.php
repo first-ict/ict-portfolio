@@ -24,9 +24,9 @@ class AuthAdminRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:30',
-            'email' => 'required|email|unique:users,email',
-            'password' =>  'required|string|confirmed|min:8'
+        
+            'email' => 'required|email',
+            'password' =>  'required'
         ];
     }
 

@@ -46,3 +46,7 @@ Route::post('/slider', function (Request $request) {
 
 });
 
+
+
+
+
