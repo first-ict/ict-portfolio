@@ -37,7 +37,7 @@ class AuthController extends BaseController
             'condition' => true
 
         ]);
-     
+
     }
     public function login(Request $request)
     {
@@ -56,7 +56,7 @@ class AuthController extends BaseController
 
             if (Hash::check($request->password, $user->password)) {
                 $token = $user->createToken('first-ict')->plainTextToken;
-                
+
                 return response()->json([
                     'data' => ['user'=>$user,'token'=> $token],
                     'errors' => [],
@@ -71,7 +71,6 @@ class AuthController extends BaseController
 
                 return $this->error('there is no user with this email',403);
         }
-
         $token = $user->createToken('first-ict')->plainTextToken;
     }
 }
