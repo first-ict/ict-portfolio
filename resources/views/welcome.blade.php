@@ -7,6 +7,5 @@
     <title>Create</title>
 </head>
 <body>
-    <form action="{{ route('') }}"></form>
 </body>
 </html>

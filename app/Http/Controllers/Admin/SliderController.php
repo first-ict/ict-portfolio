@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Http\Requests\SliderStoreRequest;
+use App\Http\Controllers\BaseController;
 use App\Http\Resources\SliderResource;
 use App\Models\Slider;
+use Exception;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
-class SliderController extends Controller
+class SliderController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -17,10 +19,7 @@ class SliderController extends Controller
      */
     public function index()
     {
-        $sliders = SliderResource::collection(Slider::all());
-        return response()->json([
-            "data" => $sliders
-        ], 200);
+        return $this->success(SliderResource::collection(Slider::all()));
     }
 
     /**
@@ -39,34 +38,30 @@ class SliderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SliderStoreRequest $request)
     {
-        $request->validate([
-            'image' => 'required',
-            'order_by' => 'required',
-            'status' => 'required |'
-        ]);
-         $slider = new Slider();
-         $filename = time()."_".$request->file('image')->getClientOriginalName();
 
-         Storage::putFileAs(
+
+        $request->validated();
+
+        $slider = new Slider();
+        $filename = time() . "_" . $request->file('image')->getClientOriginalName();
+
+        Storage::putFileAs(
             'photos',
             $request->file('image'),
             $filename
-         );
-         $slider->image = $filename;
-          $slider->order_by = $request->order_by;
-         if ($request->status == 'true') {
+        );
+        $slider->image = $filename;
+        $slider->order_by = $request->order_by;
+        if ($request->status == 'true') {
             $slider->status = true;
-         }else{
+        } else {
             $slider->status = false;
-         }
-         $slider->save();
-         return response()->json([
-            'con' => true,
-            'data'=> 'product has successfully created'
-         ]);
+        }
+        $slider->save();
 
+        return $this->success(new SliderResource($slider));
     }
 
     /**
@@ -75,12 +70,15 @@ class SliderController extends Controller
      * @param  \App\Models\Slider  $slider
      * @return \Illuminate\Http\Response
      */
-    public function show(Slider $slider)
+    public function show($slider)
     {
-
-        return response()->json([
-            "data" =>$slider
-        ], 200);
+        try {
+            $data = Slider::where('id', $slider)->firstOrFail();
+        } catch (Exception $e) {
+            return $this->error(["message" => $e->getMessage()], 404);
+        }
+        $result = new SliderResource(Slider::where('id', $slider)->first());
+        return $this->success($result);
     }
 
     /**
@@ -101,9 +99,17 @@ class SliderController extends Controller
      * @param  \App\Models\Slider  $slider
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Slider $slider)
+    public function update(SliderStoreRequest $request, $slider)
     {
-        return $request;
+        $confrim = $request->validated();
+
+        $slider = Slider::where('id', $slider)->first();
+        if ($slider) {
+            $slider->update($request->all());
+        } else {
+            return $this->error(['message' => 'Slider not found'], 404);
+        }
+        return $this->response(null, [], 204, true);
     }
 
     /**
@@ -112,14 +118,18 @@ class SliderController extends Controller
      * @param  \App\Models\Slider  $slider
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Slider $slider)
+    public function destroy($slider)
     {
-        $path = storage_path('app/photos/'.$slider->image);
+
+        try {
+            $slider = Slider::where('id', $slider)->firstOrFail();
+        } catch (Exception $e) {
+            return $this->error(['message' => $e->getMessage()], 404);
+        }
+
+        $path = storage_path('app/photos/' . $slider->image);
         unlink($path);
         $slider->delete();
-        return response()->json([
-            'con' => true,
-            'data' => 'You have successfully deleted',
-        ],200);
+        return $this->response(null, [], 204, true);
     }
 }
