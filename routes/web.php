@@ -37,6 +37,9 @@ Route::get('/make-roles', function(){
     // Role::create(['name' => 'client']);
     // Role::create(['name' => 'customer']);
 });
+Route::get('/id', function(){
+    return session()->getId();
+});
 
 
 

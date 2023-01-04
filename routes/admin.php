@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\SliderController;
 
 
 
+
 // Api Resource
 // Eg. Route::apiResource('categories', CategoryController::class);
 
