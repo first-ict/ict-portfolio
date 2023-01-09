@@ -2,34 +2,25 @@
 
 namespace App\Http\Controllers\Admin;
 use App\Models\Content;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ContentResource;
-use App\Http\Resources\SliderResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\Http\Controllers\BaseController;
+use Exception;
 
-class ContentController extends Controller
+class ContentController extends BaseController
 {
-    public function index(){
-        return ContentResource::collection(Content::all());
-    }
-
-    public function show( $slug){
-        $content= Content::where('slug', $slug)->first();
-        return response()->json(
-            [
-                "con" => true,
-                "data" => $content
-            ],200
-        );
-    }
-
     public function store(Request $request)
     {
-        $request->validate([
-            "name" => "required",
-            "paragraph" => "required",
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'paragraph' => 'required'
         ]);
+        if ($validator->fails()) {
+            return $this->error($validator->errors(), 403);
+        }
         $content = new Content();
         $content->name = $request->name;
         $content->user_id = rand(1 , 10);
@@ -37,45 +28,49 @@ class ContentController extends Controller
         $content->paragraph = $request->paragraph;
         $content->slug =Str::of($request->name)->slug("-");
         $content->save();
-        return response()->json(
-            [
-                "con" => true,
-                "message" => "Content has been created successfully"
-            ],200
-        );
+        return $this->success(new ContentResource($content));
     }
+    public function index(){
+        return $this->success(ContentResource::collection(Content::all()));
+    }
+
+    public function show( $slug){
+        try{
+            $content= Content::where('slug', $slug)->firstOrFail();
+        }catch (Exception $e){
+            return $this->error(["message" => $e->getMessage()]);
+        }
+        $content = new ContentResource(Content::where('slug',$slug)->first());
+        return $this->success($content);
+    }
+
     public function update(Request $request, $slug)
     {
-        $request->validate([
-            "name" => "required",
-            "paragraph" => "required",
+        $validator = Validator::make($request->all(), [
+            'name' => 'string',
+            'paragraph' => 'text',
         ]);
-
+        if ($validator->fails()) {
+            return $this->error($validator->errors(), 403);
+        }
         $content = Content::where('slug',$slug)->first();
 
-        $content->name =$request->name;
-        $content->slug =Str::of($request->name)->slug("-");
-        $content->user_id = $content->user_id;
-        $content->category_id = $content->category_id;
-        $content->paragraph = $request->paragraph;
-        $content->update();
-
-        return response()->json(
-            [
-                "con" => true,
-                "data" => $content
-            ],200
-        );
+        if($content){
+            $slug = Str::of($request->name)->slug("-");
+            $content->update($request->all());
+            return $this->success(new ContentResource($content));
+        }else{
+            return $this->error(['message'=> "Category not found"],404);
+        }
     }
     public function destroy($slug)
     {
-        $content = Content::where('slug', $slug)->first();
+        try{
+            $content= Content::where('slug', $slug)->firstOrFail();
+        }catch (Exception $e){
+            return $this->error(["message" => $e->getMessage()],404);
+        }
         $content->delete();
-        return response()->json(
-            [
-                "con" => true,
-                "message" => "Content has been deleted successfully"
-            ],200
-        );
+        return $this->response(null,[], 204, true);
     }
 }
