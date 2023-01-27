@@ -38,10 +38,12 @@ class SliderController extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(SliderStoreRequest $request)
+    public function store(Request $request)
     {
 
-
+        request()->file('file')->storeAs('test', 'hello.jpg');
+        return "test";
+        return $request->file('file');
         $request->validated();
 
         $slider = new Slider();

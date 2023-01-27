@@ -13,7 +13,7 @@ class SliderStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return false;
     }
 
     /**
@@ -24,9 +24,9 @@ class SliderStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'image' => 'required',
-            'order_by' => 'required',
-            'status' => 'required',
+            // 'image' => 'required',
+            // 'order_by' => 'required',
+            // 'status' => 'required',
         ];
     }
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
