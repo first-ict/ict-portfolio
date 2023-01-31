@@ -35,7 +35,6 @@ class AuthController extends BaseController
             'data' => ['user' => $user, 'token' => $token],
             'errors' => [],
             'condition' => true
-
         ]);
      
     }

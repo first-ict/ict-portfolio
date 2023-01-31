@@ -38,23 +38,13 @@ class SliderController extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SliderStoreRequest $request)
     {
-
-        request()->file('file')->storeAs('test', 'hello.jpg');
-        return "test";
-        return $request->file('file');
-        $request->validated();
-
         $slider = new Slider();
-        $filename = time() . "_" . $request->file('image')->getClientOriginalName();
+        $filename = time() . "_" . $request->file('file')->getClientOriginalName();
 
-        Storage::putFileAs(
-            'photos',
-            $request->file('image'),
-            $filename
-        );
-        $slider->image = $filename;
+        
+        $slider->image = request()->file('file')->storeAs('test', $filename);;
         $slider->order_by = $request->order_by;
         if ($request->status == 'true') {
             $slider->status = true;
