@@ -6,7 +6,6 @@ use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Redis;
 use App\Http\Controllers\BaseController;
 use App\Http\Resources\CategoryResource;
 use Exception;
@@ -25,9 +24,15 @@ class CategoryController extends BaseController
         }
 
         $category = new Category();
+        $category->slug = Str::of($request->name)->slug();
         $category->name = $request->name;
         $category->order_by = rand(0 , 10);
-        $category->status = (bool)$request->status;
+        if ($request->status == "true") {
+            $category->status = true;
+        }
+        else{
+            $category->status = false;
+        }
 
         $category->save();
 
@@ -50,26 +55,32 @@ class CategoryController extends BaseController
         return $this->success($category);
     }
 
-    public function update(Request $request , $slug)
+    public function update(Request $request , $category)
     {
 
         $validator = Validator::make($request->all(), [
             'name' => 'string',
-            'status' => 'boolean'
+            'status' => 'required'
         ]);
-        // return request()->all();
         if ($validator->fails()) {
             return $this->error($validator->errors(), 403);
         }
 
-        $category = Category::where('slug' , $slug)->first();
-
-        if ($category) {
+        $categoryData = Category::where('slug' , $category)->first();
+        if ($categoryData) {
             $slug = Str::of($request->name)->slug('-');
-            $category->update($request->all());
+            $categoryData->name = $request->name;
+            if ($request->status == "true") {
+                $status = true;
+            }
+            else{
+                $status = false;
+            }
+            $categoryData->status = $status;
+            $categoryData->slug = $slug;
+            $categoryData->update();
 
-            // $category->save();
-            return $this->success(new CategoryResource($category));
+            return $this->success(new CategoryResource($categoryData));
         }
         else{
             return $this->error(['message'=> "Category not found", 404]);

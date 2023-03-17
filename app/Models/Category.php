@@ -12,18 +12,6 @@ class Category extends Model
     use HasFactory, SoftDeletes;
 
     protected $guarded = [];
-    protected static function booted()
-    {
-        static::creating(function ($category) {
-            $slug = Str::slug("hwllo adl;fkj");
-            $exist_cat = Category::where('slug', $slug)->first();
-            if($exist_cat){
-                $category->slug = $slug . rand(1, 100);
-            } else {
-                $category->slug = $slug;
 
-            }
-        });
-    }
 
 }

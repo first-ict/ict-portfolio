@@ -52,7 +52,7 @@ class AuthController extends BaseController
 
                 return $this->error('there is no user with this email',403);
         }
-
+        
         $token = $user->createToken('first-ict')->plainTextToken;
     }
 }
