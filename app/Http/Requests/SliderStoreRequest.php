@@ -26,9 +26,10 @@ class SliderStoreRequest extends FormRequest
         return [
             'file' => 'required',
             'order_by' => 'required',
-            // 'status' => 'required',
+            'status' => 'required',
         ];
     }
+
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
         $response = response()->json([

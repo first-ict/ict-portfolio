@@ -17,9 +17,9 @@ class SliderController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        return $this->success(SliderResource::collection(Slider::all()));
+    public function index(Request $request)
+    {   $perPage = request('perPage', 2);
+        return $this->success(SliderResource::collection(Slider::paginate($perPage)));
     }
 
     /**
@@ -43,8 +43,8 @@ class SliderController extends BaseController
         $slider = new Slider();
         $filename = time() . "_" . $request->file('file')->getClientOriginalName();
 
-        
-        $slider->image = request()->file('file')->storeAs('test', $filename);;
+
+        $slider->image = request()->file('file')->storeAs('photos', $filename);;
         $slider->order_by = $request->order_by;
         if ($request->status == 'true') {
             $slider->status = true;
@@ -91,18 +91,29 @@ class SliderController extends BaseController
      * @param  \App\Models\Slider  $slider
      * @return \Illuminate\Http\Response
      */
-    public function update(SliderStoreRequest $request, $slider)
+    public function update(Request $request,$slider)
     {
-        $confrim = $request->validated();
-
         $slider = Slider::where('id', $slider)->first();
-        if ($slider) {
-            $slider->update($request->all());
-        } else {
-            return $this->error(['message' => 'Slider not found'], 404);
+        if($request->file('file')){
+            $path =  storage_path('app/'.$slider->image);
+            unlink($path);
+            $filename = time() . "_" . $request->file('file')->getClientOriginalName();
+            $slider->image = request()->file('file')->storeAs('photos', $filename);
         }
-        return $this->response(null, [], 204, true);
+        $slider->order_by = $request->order_by;
+        if ($request->status == 'true') {
+            $slider->status = true;
+        } else {
+            $slider->status = false;
+        }
+        $slider->update();
+
+        return response()->json([
+            'message' => 'oki',
+            'data'  => $request->file
+        ], 200);
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -119,7 +130,7 @@ class SliderController extends BaseController
             return $this->error(['message' => $e->getMessage()], 404);
         }
 
-        $path = storage_path('app/photos/' . $slider->image);
+        $path = storage_path('app/' . $slider->image);
         unlink($path);
         $slider->delete();
         return $this->response(null, [], 204, true);

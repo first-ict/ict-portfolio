@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AuthAdminRequest extends FormRequest
+class RegisterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,10 @@ class AuthAdminRequest extends FormRequest
     public function rules()
     {
         return [
-
-            'email' => 'required|email',
-            'password' => 'required|min:8|string|max:16',
-
+            'name' => 'required|max:30',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:8|string|confirmed|max:16',
+            'password_confirmation' => 'required'
         ];
     }
 
@@ -40,5 +40,6 @@ class AuthAdminRequest extends FormRequest
         ], 422);
 
         throw new \Illuminate\Validation\ValidationException($validator, $response);
-    }
+
+      }
 }

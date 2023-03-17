@@ -1,9 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\ContentController;
+use App\Http\Controllers\Admin\EditController;
 use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\ContentController;
+use App\Http\Controllers\Admin\CategoryController;
 
 
 
