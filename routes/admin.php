@@ -12,11 +12,9 @@ use App\Http\Controllers\Admin\CategoryController;
     Route::apiResource('categories', CategoryController::class);
 
 
-    // Naing Htet Htoo
-    Route::apiResource('contents', ContentController::class);
+    // Zwe Zar Ni
+Route::apiResource('categories', CategoryController::class);
 
-    // Mratt Kyaw Thu
-    Route::apiResource('sliders', SliderController::class);
 
 
 
