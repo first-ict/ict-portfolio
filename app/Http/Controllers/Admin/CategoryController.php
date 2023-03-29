@@ -20,7 +20,7 @@ class CategoryController extends BaseController
             'status' => 'required'
         ]);
         if ($validator->fails()) {
-            return $this->error($validator->errors(), 403);
+            return $this->validateError($validator->errors());
         }
 
         $category = new Category();
@@ -41,7 +41,7 @@ class CategoryController extends BaseController
 
     public function index()
     {
-            return $this->success(CategoryResource::collection(Category::all()));
+        return $this->success(CategoryResource::collection(Category::all()), "All Cateogries");
     }
 
     public function show($slug)
@@ -52,7 +52,7 @@ class CategoryController extends BaseController
             return $this->error(["message"=> $e->getMessage()], 404);
         }
         $category = new CategoryResource(Category::where('slug' , $slug)->first());
-        return $this->success($category);
+        return $this->success($category, "Category Detail");
     }
 
     public function update(Request $request , $category)
@@ -63,7 +63,7 @@ class CategoryController extends BaseController
             'status' => 'required'
         ]);
         if ($validator->fails()) {
-            return $this->error($validator->errors(), 403);
+            return $this->validateError($validator->errors());
         }
 
         $categoryData = Category::where('slug' , $category)->first();

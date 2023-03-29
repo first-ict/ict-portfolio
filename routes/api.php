@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,5 +21,13 @@ use Illuminate\Support\Facades\Hash;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::get('/make-roles',function(){
+    // $password = Hash::make('internet');
+    $user = User::first();
+    $token =$user->createToken('auth_token');
+    // $user->assignRole('admin');
+    return $token;
+});
+
 Route::post('/register',[AuthController::class, 'register']);
 Route::post('/login',[AuthController::class, 'login']);

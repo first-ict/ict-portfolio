@@ -5,8 +5,6 @@ use App\Http\Controllers\Admin\SliderController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redis;
 use Spatie\Permission\Models\Role;
 
@@ -72,15 +70,10 @@ Route::get('/make-roles', function (){
 });
 
 
-<<<<<<< HEAD
-
-
-=======
 #1|eS9Al9T6JVkf2Mpm7qU5R5mXuH3G3oD5AMJXx5in
 #2|yyoSaMRy3dzkOEju29TRB9Rqim8HNOxVUtwU9k4p
 #3|1q7Y0FtfCesaq5l9ELUQGdqb16qzpzlXEaiEXo95
 #4|csnj3Z08zG7GEkoOXeS1fULF3txRsT6f2lr35N0V
 
 #7|LjEmCTwxtyxNcMXZZrbkuPXQmSy5nvMZSMEnlTF6   admin
->>>>>>> origin/naing
 

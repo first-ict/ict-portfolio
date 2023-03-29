@@ -28,7 +28,7 @@ class ContentController extends BaseController
         $content->paragraph = $request->paragraph;
         $content->slug =Str::of($request->name)->slug("-");
         $content->save();
-        return $this->success(new ContentResource($content));
+        return $this->success(new ContentResource($content), "Content Created");
     }
     public function index(){
         return $this->success(ContentResource::collection(Content::all()));

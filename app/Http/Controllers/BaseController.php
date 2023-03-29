@@ -6,18 +6,23 @@ use Illuminate\Http\Request;
 
 class BaseController extends Controller
 {
-    public function success($data)
+    public function success($data, $message = '')
     {
-        return $data->additional(['condition'=> true]);
+        return $data->additional(['condition'=> true, 'message' => $message] );
     }
-    public function error($errors = [], $code = 404)
+    public function error($errors = [], $code = 422, $message = '')
     {
-        return $this->response([], $errors, $code, false);
+        return $this->response($message,[], $errors, $code, false);
     }
-    public function response($data,$errors, $code=200,$condition=true)
+    public function validateError($errors = [])
+    {
+        return $this->response("Validation Error",[], $errors, 422, false);
+    }
+    public function response($message = '', $data,$errors = null, $code=200,$condition=true)
     {
         return response()->json([
             'data'=>$data,
+            'message'=>$message,
             'errors' => $errors,
             'code' => $code,
             'condition' => $condition,
