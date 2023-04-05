@@ -9,9 +9,12 @@ use Illuminate\Http\Request;
 
 class FileController extends BaseController
 {
+    public function  show($file){
+       $file =  File::where('id', $file)->first();
+       return $this->response("File",$file->file);
+    }
     public function store(Request $request)
     {
-        // return "hello world";
         $filename = time() . "_" . $request->file('file')->getClientOriginalName();
         $filename = request()->file('file')->storeAs('photos', $filename);
         $file = new File();

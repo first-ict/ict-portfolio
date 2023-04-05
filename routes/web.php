@@ -21,12 +21,12 @@ use Spatie\Permission\Models\Role;
 
 Route::get('/', function () {
     return view('welcome');
-}); 
+});
 Route::get('/register',function(){
     // $user = new User();
-    // $user->email = "naruto@gmail.com";
-    // $user->name = "naruto";
-    // $user->password = Hash::make('narut0');
+    // $user->email = "admin@gmail.com";
+    // $user->name = "admin";
+    // $user->password = Hash::make('admin');
     // $user->save();
     // $token = $user->createToken('First-ict')->plainTextToken;
     // return ['User'=> $user,'Token'=> $token];
@@ -60,14 +60,6 @@ Route::post('/slider', function (Request $request) {
 });
 
 
-Route::get('/make-roles', function (){
-    $user = User::first();
-    $user->assignRole('admin');
-    return $user->createToken('first-ict')->plainTextToken;
-    // Role::create(['name' => 'admin']);
-    // Role::create(['name' => 'client']);
-    // Role::create(['name' => 'customer']);
-});
 
 
 #1|eS9Al9T6JVkf2Mpm7qU5R5mXuH3G3oD5AMJXx5in
