@@ -20,7 +20,7 @@ class SliderController extends BaseController
      */
     public function index(Request $request)
     {
-        return $this->success(SliderResource::collection(Slider::paginate()));
+        return $this->success(SliderResource::collection(Slider::with('image')->paginate(10)));
     }
 
     /**

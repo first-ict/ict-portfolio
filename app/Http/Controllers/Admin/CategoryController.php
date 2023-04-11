@@ -26,13 +26,7 @@ class CategoryController extends BaseController
         $category = new Category();
         $category->slug = Str::of($request->name)->slug();
         $category->name = $request->name;
-        $category->order_by = rand(0 , 10);
-        if ($request->status == "true") {
-            $category->status = true;
-        }
-        else{
-            $category->status = false;
-        }
+        $category->status = $request->status;
 
         $category->save();
 
@@ -70,13 +64,9 @@ class CategoryController extends BaseController
         if ($categoryData) {
             $slug = Str::of($request->name)->slug('-');
             $categoryData->name = $request->name;
-            if ($request->status == "true") {
-                $status = true;
-            }
-            else{
-                $status = false;
-            }
-            $categoryData->status = $status;
+            // $category->status = $request->status;
+
+            $categoryData->status = $request->status;
             $categoryData->slug = $slug;
             $categoryData->update();
 
