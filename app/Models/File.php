@@ -9,4 +9,5 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class File extends Model
 {
     use HasFactory, SoftDeletes;
+    Protected $guarded = [];
 }

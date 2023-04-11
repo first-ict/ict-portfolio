@@ -24,7 +24,7 @@ class SliderStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'file' => 'required',
+            'image_id' => 'required',
             'order_by' => 'required',
             'status' => 'required',
         ];

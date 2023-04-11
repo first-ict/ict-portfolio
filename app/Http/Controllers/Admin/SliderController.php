@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\SliderStoreRequest;
-use App\Http\Controllers\BaseController;
-use App\Http\Resources\SliderResource;
-use App\Models\Slider;
 use Exception;
-use Illuminate\Support\Facades\Storage;
+use App\Models\File;
+use App\Models\Slider;
 use Illuminate\Http\Request;
+use App\Http\Resources\SliderResource;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\BaseController;
+use App\Http\Requests\SliderStoreRequest;
 
 class SliderController extends BaseController
 {
@@ -18,8 +19,8 @@ class SliderController extends BaseController
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {   $perPage = request('perPage', 2);
-        return $this->success(SliderResource::collection(Slider::paginate($perPage)));
+    {
+        return $this->success(SliderResource::collection(Slider::paginate()));
     }
 
     /**
@@ -41,11 +42,8 @@ class SliderController extends BaseController
     public function store(SliderStoreRequest $request)
     {
         $slider = new Slider();
-        $filename = time() . "_" . $request->file('file')->getClientOriginalName();
-
-
-        $slider->image = request()->file('file')->storeAs('photos', $filename);;
-        $slider->order_by = $request->order_by;
+        $slider->image_id = $request->image_id;
+         $slider->order_by = $request->order_by;
         if ($request->status == 'true') {
             $slider->status = true;
         } else {
@@ -93,25 +91,20 @@ class SliderController extends BaseController
      */
     public function update(Request $request,$slider)
     {
-        $slider = Slider::where('id', $slider)->first();
-        if($request->file('file')){
-            $path =  storage_path('app/'.$slider->image);
-            unlink($path);
-            $filename = time() . "_" . $request->file('file')->getClientOriginalName();
-            $slider->image = request()->file('file')->storeAs('photos', $filename);
-        }
-        $slider->order_by = $request->order_by;
-        if ($request->status == 'true') {
-            $slider->status = true;
-        } else {
-            $slider->status = false;
-        }
-        $slider->update();
+                $slider = Slider::where('id', $slider)->first();
+                $slider->image_id = $request->image_id;
+                $slider->order_by = $request->order_by;
+                if ($request->status == 'true') {
+                    $slider->status = true;
+                } else {
+                    $slider->status = false;
+                }
+                $slider->update();
 
-        return response()->json([
-            'message' => 'oki',
-            'data'  => $request->file
-        ], 200);
+                return response()->json([
+                    'message' => 'oki',
+                    'data'  => $slider
+                ], 200);
     }
 
 
@@ -129,9 +122,6 @@ class SliderController extends BaseController
         } catch (Exception $e) {
             return $this->error(['message' => $e->getMessage()], 404);
         }
-
-        $path = storage_path('app/' . $slider->image);
-        unlink($path);
         $slider->delete();
         return $this->response(null, [], 204, true);
     }
