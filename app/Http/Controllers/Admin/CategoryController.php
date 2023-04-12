@@ -18,7 +18,6 @@ class CategoryController extends BaseController
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'status' => 'required',
-            'image_id' => 'required'
         ]);
         if ($validator->fails()) {
             return $this->validateError($validator->errors());
@@ -27,8 +26,9 @@ class CategoryController extends BaseController
         $category->slug = Str::of($request->name)->slug();
         $category->name = $request->name;
         $category->status = $request->status;
-        $category->image_id = $request->image_id;
-
+        if ($request->image_id) {
+            $category->image_id = $request->image_id;
+        }
         $category->save();
 
         return $this->success(new CategoryResource($category));
@@ -65,7 +65,9 @@ class CategoryController extends BaseController
             $slug = Str::of($request->name)->slug('-');
             $categoryData->name = $request->name;
             $categoryData->status = $request->status;
-            $categoryData->image_id = $request->image_id;
+            if ($request->image_id) {
+                $category->image_id = $request->image_id;
+            }
             $categoryData->slug = $slug;
             $categoryData->update();
 
