@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 
 class FileController extends BaseController
 {
+    public function index()
+    {
+        return $this->response('fetched all photos' , File::all());
+    }
     public function  show($file){
        $file =  File::where('id', $file)->first();
        return $this->response("File",$file->file);
