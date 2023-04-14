@@ -2,6 +2,9 @@
 
 namespace App\Console;
 
+use App\Models\File;
+use App\Models\Slider;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -15,7 +18,15 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->call(function () {
+            $slider = Slider::all();
+            $data =  $slider->pluck('image_id')->toArray();
+            $file = File::whereNotIn('id', $data)->get();
+            $photos =  $file->pluck('file')->toArray();
+            File::whereNotIn('id', $data)->delete();
+            Storage::delete($photos);
+        }) ->timezone('Asia/Yangon')->everyMinute();
+
     }
 
     /**
