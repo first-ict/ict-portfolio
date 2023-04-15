@@ -27,6 +27,9 @@ class CategoryController extends BaseController
         $category->slug = Str::of($request->name)->slug();
         $category->name = $request->name;
         $category->status = $request->status;
+        if ($request->image_id) {
+            $category->image_id = $request->image_id;
+        }
 
         $category->save();
 
@@ -68,6 +71,9 @@ class CategoryController extends BaseController
 
             $categoryData->status = $request->status;
             $categoryData->slug = $slug;
+            if ($request->image_id) {
+                $category->image_id = $request->image_id;
+            }
             $categoryData->update();
 
             return $this->success(new CategoryResource($categoryData));

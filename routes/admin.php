@@ -13,3 +13,4 @@ Route::apiResource('contents', ContentController::class);
 Route::apiResource('sliders', SliderController::class);
 Route::post('files', [FileController::class, 'store']);
 Route::get('files/{file}', [FileController::class, 'show']);
+Route::get('files', [FileController::class, 'index']);

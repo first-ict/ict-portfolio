@@ -32,9 +32,9 @@ Route::get('/register',function(){
     // return ['User'=> $user,'Token'=> $token];
 });
 Route::get('/make-roles', function(){
-    $user = User::first();
-    $user->assignRole('admin');
-    return $user->createToken('first-ict')->plainTextToken;
+    // $user = User::first();
+    // $user->assignRole('admin');
+    // return $user->createToken('first-ict')->plainTextToken;
     // Role::create(['name' => 'admin']);
     // Role::create(['name' => 'client']);
     // Role::create(['name' => 'customer']);
