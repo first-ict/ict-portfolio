@@ -1,12 +1,16 @@
 <?php
-use App\Models\Slider;
+use App\Models\File;
 use App\Models\User;
-use App\Http\Controllers\Admin\SliderController;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Hash;
+use App\Models\Slider;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Frontend\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,8 +23,18 @@ use Spatie\Permission\Models\Role;
 |
 */
 
+
+
 Route::get('/', function () {
-    return view('welcome');
+    $slider = Slider::all();
+    $data =  $slider->pluck('image_id')->toArray();
+    $file = File::whereNotIn('id', $data)->get();
+   $photos =  $file->pluck('file')->toArray();
+   File::whereNotIn('id', $data)->delete();
+   Storage::delete($photos);
+    return response()->json([
+        'data' => 'oki',
+    ]);
 });
 Route::get('/register',function(){
     // $user = new User();
