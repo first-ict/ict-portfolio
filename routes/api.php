@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Frontend\HomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
@@ -21,13 +22,11 @@ use Spatie\Permission\Models\Role;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('/make-roles',function(){
-    // $password = Hash::make('internet');
-    $user = User::first();
-    $token =$user->createToken('auth_token');
-    // $user->assignRole('admin');
-    return $token;
-});
+
+
+Route::get('/get-sliders',[HomeController::class, 'getSliders']);
+Route::get('/get-contents',[HomeController::class, 'getContents']);
+Route::get('/get-all-contents',[HomeController::class, 'getAllContents']);
 
 Route::post('/register',[AuthController::class, 'register']);
 Route::post('/login',[AuthController::class, 'login']);

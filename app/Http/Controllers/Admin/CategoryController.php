@@ -52,6 +52,7 @@ class CategoryController extends BaseController
 
     public function update(Request $request , $category)
     {
+        // return ;
         $validator = Validator::make($request->all(), [
             'name' => 'string',
             'status' => 'required'
@@ -61,13 +62,13 @@ class CategoryController extends BaseController
         }
 
         $categoryData = Category::where('slug' , $category)->first();
+        // $categoryData
         if ($categoryData) {
             $slug = Str::of($request->name)->slug('-');
             $categoryData->name = $request->name;
             $categoryData->status = $request->status;
-            if ($request->image_id) {
-                $category->image_id = $request->image_id;
-            }
+            $categoryData->image_id = (int)$request->image_id;
+            
             $categoryData->slug = $slug;
             $categoryData->update();
 
