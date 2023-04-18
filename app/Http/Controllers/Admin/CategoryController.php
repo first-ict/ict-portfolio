@@ -67,8 +67,9 @@ class CategoryController extends BaseController
             $slug = Str::of($request->name)->slug('-');
             $categoryData->name = $request->name;
             $categoryData->status = $request->status;
-            $categoryData->image_id = (int)$request->image_id;
-            
+            if ($request->image_id) {
+                $categoryData->image_id = (int)$request->image_id;
+            }
             $categoryData->slug = $slug;
             $categoryData->update();
 
