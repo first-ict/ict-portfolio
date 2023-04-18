@@ -39,7 +39,7 @@ class HomeController extends BaseController
 
     public function getContentsByCategory($id)
     {
-        $contents = Content::latest()->where('category_id', $id)->paginate(12);
+        $contents = Content::latest()->where('category_id', $id)->get();
         return $this->response("Content List", $contents);
     }
 
