@@ -29,6 +29,7 @@ class CategoryController extends BaseController
         if ($request->image_id) {
             $category->image_id = $request->image_id;
         }
+
         $category->save();
 
         return $this->success(new CategoryResource($category));
@@ -70,6 +71,9 @@ class CategoryController extends BaseController
             $categoryData->image_id = (int)$request->image_id;
             
             $categoryData->slug = $slug;
+            if ($request->image_id) {
+                $category->image_id = $request->image_id;
+            }
             $categoryData->update();
 
             return $this->success(new CategoryResource($categoryData));
