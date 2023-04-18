@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ContentResource;
+use App\Http\Resources\SliderResource;
 use App\Models\Category;
 use App\Models\Content;
 use App\Models\Slider;
@@ -17,6 +19,12 @@ class HomeController extends BaseController
         return $this->response("Content List", $contents);
     }
 
+    public function getAllContents()
+    {
+        $contents = ContentResource::collection(Content::latest()->paginate(4));
+        return $this->success($contents, "All Contents");
+    }
+
     public function getCategories()
     {
         $categories = Category::get();
@@ -25,8 +33,8 @@ class HomeController extends BaseController
 
     public function getSliders()
     {
-        $sliders = Slider::orderBy('order_id', 'asc')->active()->get();
-        return $this->response("Slider List", $sliders);
+        $sliders = SliderResource::collection(Slider::orderBy('order_by', 'asc')->active()->with('image')->get());
+        return $this->success($sliders, "Sliders");
     }
 
     public function getContentsByCategory($id)

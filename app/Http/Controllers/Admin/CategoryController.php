@@ -17,12 +17,11 @@ class CategoryController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'status' => 'required'
+            'status' => 'required',
         ]);
         if ($validator->fails()) {
             return $this->validateError($validator->errors());
         }
-
         $category = new Category();
         $category->slug = Str::of($request->name)->slug();
         $category->name = $request->name;
@@ -38,7 +37,7 @@ class CategoryController extends BaseController
 
     public function index()
     {
-        return $this->success(CategoryResource::collection(Category::all()), "All Cateogries");
+        return $this->success(CategoryResource::collection(Category::with('image')->get()), "All Cateogries");
     }
 
     public function show($slug)
@@ -48,13 +47,13 @@ class CategoryController extends BaseController
         } catch (Exception $e){
             return $this->error(["message"=> $e->getMessage()], 404);
         }
-        $category = new CategoryResource(Category::where('slug' , $slug)->first());
+        $category = new CategoryResource(Category::where('slug' , $slug)->with('image')->first());
         return $this->success($category, "Category Detail");
     }
 
     public function update(Request $request , $category)
     {
-
+        // return ;
         $validator = Validator::make($request->all(), [
             'name' => 'string',
             'status' => 'required'
@@ -64,12 +63,13 @@ class CategoryController extends BaseController
         }
 
         $categoryData = Category::where('slug' , $category)->first();
+        // $categoryData
         if ($categoryData) {
             $slug = Str::of($request->name)->slug('-');
             $categoryData->name = $request->name;
-            // $category->status = $request->status;
-
             $categoryData->status = $request->status;
+            $categoryData->image_id = (int)$request->image_id;
+            
             $categoryData->slug = $slug;
             if ($request->image_id) {
                 $category->image_id = $request->image_id;

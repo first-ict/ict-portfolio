@@ -41,17 +41,18 @@ class SliderController extends BaseController
      */
     public function store(SliderStoreRequest $request)
     {
-        $slider = new Slider();
-        $slider->image_id = $request->image_id;
-         $slider->order_by = $request->order_by;
-        if ($request->status == 'true') {
-            $slider->status = true;
-        } else {
-            $slider->status = false;
-        }
-        $slider->save();
 
-        return $this->success(new SliderResource($slider));
+                $slider = new Slider();
+                $slider->image_id = $request->image_id;
+                $slider->order_by = $request->order_by;
+                if ($request->status == 'true') {
+                    $slider->status = true;
+                } else {
+                    $slider->status = false;
+                }
+                $slider->save();
+
+                return $this->success(new SliderResource($slider));
     }
 
     /**
@@ -116,13 +117,15 @@ class SliderController extends BaseController
      */
     public function destroy($slider)
     {
-
         try {
             $slider = Slider::where('id', $slider)->firstOrFail();
         } catch (Exception $e) {
             return $this->error(['message' => $e->getMessage()], 404);
         }
         $slider->delete();
-        return $this->response(null, [], 204, true);
+
+        return $this->success(SliderResource::collection(Slider::with('image')->paginate(10)));
+
     }
+
 }

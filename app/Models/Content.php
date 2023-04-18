@@ -12,8 +12,10 @@ class Content extends Model
 
     use HasFactory, SoftDeletes;
 
+
     public function image()
     {
         return $this->belongsTo(File::class, 'image_id');
     }
+
 }
