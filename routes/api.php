@@ -26,6 +26,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/get-sliders',[HomeController::class, 'getSliders']);
 Route::get('/get-contents',[HomeController::class, 'getContents']);
+Route::get('/get-content/{slug}',[HomeController::class, 'getContent']);
 Route::get('/get-all-contents',[HomeController::class, 'getAllContents']);
 
 Route::post('/register',[AuthController::class, 'register']);
