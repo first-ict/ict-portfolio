@@ -38,7 +38,7 @@ class HomeController extends BaseController
 
     public function getCategories()
     {
-        $categories = Category::get();
+        $categories = Category::with('image')->get();
         return $this->response("Categories List", $categories);
     }
 
@@ -50,7 +50,7 @@ class HomeController extends BaseController
 
     public function getContentsByCategory($id)
     {
-        $contents = Content::latest()->where('category_id', $id)->paginate(12);
+        $contents = Content::latest()->where('category_id', $id)->get();
         return $this->response("Content List", $contents);
     }
 
