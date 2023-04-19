@@ -2,27 +2,38 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Http\Controllers\BaseController;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\ContentResource;
-use App\Http\Resources\SliderResource;
-use App\Models\Category;
-use App\Models\Content;
+use Exception;
 use App\Models\Slider;
+use App\Models\Content;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\SliderResource;
+use App\Http\Resources\ContentResource;
+use App\Http\Controllers\BaseController;
 
 class HomeController extends BaseController
 {
     public function getContents()
     {
-        $contents = Content::latest()->take(4)->get();
+        $contents = Content::with('image')->latest()->take(4)->get();
         return $this->response("Content List", $contents);
     }
 
     public function getAllContents()
     {
-        $contents = ContentResource::collection(Content::latest()->paginate(4));
+        $contents = ContentResource::collection(Content::latest()->paginate(6));
         return $this->success($contents, "All Contents");
+    }
+    public function getContent($slug)
+    {
+        try{
+            $content= Content::where('slug', $slug)->firstOrFail();
+        }catch (Exception $e){
+            return $this->error(["message" => $e->getMessage()]);
+        }
+        $content = new ContentResource(Content::where('slug',$slug)->first());
+        return $this->success($content,"Content Detail");
     }
 
     public function getCategories()

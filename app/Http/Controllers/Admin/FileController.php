@@ -17,10 +17,6 @@ class FileController extends BaseController
        $file =  File::where('id', $file)->first();
        return $this->response("File",$file->file);
     }
-    public function index()
-    {
-        return $this->response("all photos", File::all());
-    }
     public function store(Request $request)
     {
         $filename = time() . "_" . $request->file('file')->getClientOriginalName();

@@ -16,18 +16,19 @@ class ContentController extends BaseController
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'paragraph' => 'required',
-            'image_id' => 'required'
         ]);
         if ($validator->fails()) {
             return $this->error($validator->errors(), 403);
         }
         $content = new Content();
         $content->name = $request->name;
+        if($request->image_id) {
+            $content->image_id = $request->image_id;
+        }
         $content->user_id = rand(1 , 10);
         $content->category_id = rand(1,10);
         $content->paragraph = $request->paragraph;
         $content->slug =Str::of($request->name)->slug("-");
-        $content->image_id = $request->image_id;
         $content->save();
         return $this->success(new ContentResource($content), "Content Created");
     }
@@ -49,7 +50,6 @@ class ContentController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'paragraph' => 'required|string',
-            'image_id' => 'required',
             'name' => 'required',
         ]);
         if ($validator->fails()) {
@@ -60,7 +60,9 @@ class ContentController extends BaseController
             $slug = Str::of($request->name)->slug("-");
             $content->name = $request->name;
             $content->paragraph = $request->paragraph;
-            $content->image_id = $request->image_id;
+            if($request->image_id) {
+                $content->image_id = $request->image_id;
+            }
             $content->user_id = rand(1 , 10);
             $content->category_id = rand(1,10);
             $content->slug =$slug;
