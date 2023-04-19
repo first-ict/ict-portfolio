@@ -50,7 +50,7 @@ class HomeController extends BaseController
 
     public function getContentsByCategory($id)
     {
-        $contents = Content::latest()->where('category_id', $id)->get();
+        $contents = Content::latest()->where('category_id', $id)->with('image')->get();
         return $this->response("Content List", $contents);
     }
 
