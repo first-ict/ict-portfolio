@@ -22,17 +22,18 @@ class CategoryController extends BaseController
         if ($validator->fails()) {
             return $this->validateError($validator->errors());
         }
+
         $category = new Category();
         $category->slug = Str::of($request->name)->slug();
         $category->name = $request->name;
         $category->status = $request->status;
         if ($request->image_id) {
-            $category->image_id = $request->image_id;
+            $category->image_id = (int)$request->image_id;
         }
 
         $category->save();
 
-        return $this->success(new CategoryResource($category));
+        return $this->success(new CategoryResource($category) , 'created');
     }
 
     public function index()
@@ -73,7 +74,7 @@ class CategoryController extends BaseController
             }
             $categoryData->slug = $slug;
             if ($request->image_id) {
-                $category->image_id = $request->image_id;
+                $categoryData->image_id = $request->image_id;
             }
             $categoryData->update();
 

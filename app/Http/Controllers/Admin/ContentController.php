@@ -16,6 +16,7 @@ class ContentController extends BaseController
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'paragraph' => 'required',
+            'category_id' => 'required'
         ]);
         if ($validator->fails()) {
             return $this->error($validator->errors(), 403);
@@ -25,8 +26,8 @@ class ContentController extends BaseController
         if($request->image_id) {
             $content->image_id = $request->image_id;
         }
-        $content->user_id = rand(1 , 10);
-        $content->category_id = rand(1,10);
+        $content->user_id = rand(1 , 5);
+        $content->category_id = $request->category_id;
         $content->paragraph = $request->paragraph;
         $content->slug =Str::of($request->name)->slug("-");
         $content->save();
