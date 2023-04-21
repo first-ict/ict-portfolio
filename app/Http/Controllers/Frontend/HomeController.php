@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\SliderResource;
 use App\Http\Resources\ContentResource;
 use App\Http\Controllers\BaseController;
+use App\Http\Resources\CategoryResource;
 
 class HomeController extends BaseController
 {
@@ -38,8 +39,10 @@ class HomeController extends BaseController
 
     public function getCategories()
     {
-        $categories = Category::with('image')->get();
-        return $this->response("Categories List", $categories);
+        $categories = CategoryResource::collection(Category::with(['contents'=> function($query) {
+            $query->orderBy('id', 'desc')->take(3);
+        }])->get());
+        return $this->success($categories);
     }
 
     public function getSliders()

@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Resources\CategoryResource;
+use App\Models\Category;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,17 +26,24 @@ use App\Http\Controllers\Frontend\HomeController;
 */
 
 
+// dd(Category::find(3)->contents()->get());
 
 Route::get('/', function () {
-    $slider = Slider::all();
-    $data =  $slider->pluck('image_id')->toArray();
-    $file = File::whereNotIn('id', $data)->get();
-   $photos =  $file->pluck('file')->toArray();
-   File::whereNotIn('id', $data)->delete();
-   Storage::delete($photos);
-    return response()->json([
-        'data' => 'oki',
-    ]);
+//     $slider = Slider::all();
+//     $data =  $slider->pluck('image_id')->toArray();
+//     $file = File::whereNotIn('id', $data)->get();
+//    $photos =  $file->pluck('file')->toArray();
+//    File::whereNotIn('id', $data)->delete();
+//    Storage::delete($photos);
+//     return response()->json([
+//         'data' => 'oki',
+//     ]);
+});
+Route::get('/hello', function() {
+    $categories = CategoryResource::collection(Category::with(['contents'=> function($query) {
+        $query->latest()->take(3);
+    }])->get());
+    return view('welcome');
 });
 Route::get('/register',function(){
     // $user = new User();
