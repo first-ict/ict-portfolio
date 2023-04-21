@@ -17,5 +17,9 @@ class Content extends Model
     {
         return $this->belongsTo(File::class, 'image_id');
     }
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 
 }
