@@ -6,6 +6,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Frontend\HomeController;
 
 /*
@@ -34,3 +35,7 @@ Route::get('/get-contents-by-category/{id}' , [HomeController::class , 'getConte
 Route::post('/register',[AuthController::class, 'register']);
 Route::post('/login',[AuthController::class, 'login']);
 Route::get('/get-sliders',[HomeController::class,'getSliders']);
+Route::post('/contact-us',[ContactController::class,'store']);
+Route::get('/contact-us/{contact}',[ContactController::class,'show']);
+Route::get('/contact-us',[ContactController::class,'index']);
+Route::delete('/contact-us/{contact}',[ContactController::class,'delete']);
