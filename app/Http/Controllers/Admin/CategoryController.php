@@ -54,7 +54,6 @@ class CategoryController extends BaseController
 
     public function update(Request $request , $category)
     {
-        // return ;
         $validator = Validator::make($request->all(), [
             'name' => 'string',
             'status' => 'required'
