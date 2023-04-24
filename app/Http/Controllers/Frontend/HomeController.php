@@ -12,6 +12,8 @@ use App\Http\Resources\SliderResource;
 use App\Http\Resources\ContentResource;
 use App\Http\Controllers\BaseController;
 use App\Http\Resources\CategoryResource;
+use App\Http\Resources\ServiceResource;
+use App\Models\Service;
 
 class HomeController extends BaseController
 {
@@ -26,6 +28,11 @@ class HomeController extends BaseController
         $contents = ContentResource::collection(Content::latest()->paginate(6));
         return $this->success($contents, "All Contents");
     }
+    public function getAllServices()
+    {
+        $services = ServiceResource::collection(Service::latest()->paginate(6));
+        return $this->success($services, "All Services");
+    }
     public function getContent($slug)
     {
         try{
@@ -36,11 +43,20 @@ class HomeController extends BaseController
         $content = new ContentResource(Content::where('slug',$slug)->first());
         return $this->success($content,"Content Detail");
     }
-
+    public function getService($id)
+    {
+        try{
+            $service= Service::where('id', $id)->firstOrFail();
+        }catch (Exception $e){
+            return $this->error(["message" => $e->getMessage()]);
+        }
+        $service = new ServiceResource(Service::where('id',$id)->first());
+        return $this->success($service,"service Detail");
+    }
     public function getCategories()
     {
         $categories = CategoryResource::collection(Category::with(['contents'=> function($query) {
-            $query->orderBy('id', 'desc')->with('image')->get();
+            $query->orderBy('id' , 'desc')->with('image')->paginate(4);
         }])->get());
         return $this->success($categories);
     }

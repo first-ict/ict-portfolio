@@ -72,12 +72,13 @@ class ServiceController extends BaseController
 
     public function destroy($id)
     {
-        try {
-            $service = Service::where('id' , $id)->firstOrFail();
-        } catch (Exception $e){
-            return $this->error(["message"=> $e->getMessage()], 404);
+        $service = Service::where('id' , $id)->first();
+        if ($service) {
+            $service->delete();
+            return $this->response('deleted' , [] , null , 200 , true);
+        } else {
+            return 'there is no service';
         }
-        $service->delete();
-        return $this->response(null, [], 200, true);
+
     }
 }
