@@ -28,7 +28,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/get-sliders',[HomeController::class, 'getSliders']);
 Route::get('/get-contents',[HomeController::class, 'getContents']);
 Route::get('/get-content/{slug}',[HomeController::class, 'getContent']);
+Route::get('/get-service/{id}',[HomeController::class, 'getService']);
 Route::get('/get-all-contents',[HomeController::class, 'getAllContents']);
+Route::get('/get-all-services',[HomeController::class, 'getAllServices']);
 Route::get('/get-all-categories' , [HomeController::class , 'getCategories']);
 Route::get('/get-contents-by-category/{id}' , [HomeController::class , 'getContentsByCategory']);
 
