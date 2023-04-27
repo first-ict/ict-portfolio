@@ -56,7 +56,7 @@ class HomeController extends BaseController
     public function getCategories()
     {
         $categories = CategoryResource::collection(Category::with(['contents'=> function($query) {
-            $query->orderBy('id' , 'desc')->with('image')->paginate(4);
+            $query->orderBy('id','desc')->with('image')->get();
         }])->get());
         return $this->success($categories);
     }
