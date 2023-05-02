@@ -19,13 +19,22 @@ class HomeController extends BaseController
 {
     public function getContents()
     {
+        
         $contents = Content::with('image')->latest()->take(4)->get();
         return $this->response("Content List", $contents);
     }
 
     public function getAllContents()
     {
-        $contents = ContentResource::collection(Content::latest()->paginate(6));
+        $query = Content::latest();
+        $query->when(request()->q , function($query) {
+            foreach(explode(' ', request()->q) as $word) {
+                $query->orWhere('name', 'like', "%$word%")->orWhere('slug', 'like', "%$word%")->orWhereHas('category', function($query) use ($word){
+                    $query->where('name','like', "%$word%");
+                });
+            }
+        });
+        $contents = ContentResource::collection($query->paginate(6));
         return $this->success($contents, "All Contents");
     }
     public function getAllServices()
