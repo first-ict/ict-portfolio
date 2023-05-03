@@ -42,17 +42,19 @@ class ApplicationFormController extends BaseController
             'name' => 'required|min:4',
             'phone' => 'required|numeric',
             'email' => 'required|email|email|unique:application_forms',
-            'cv_form' => 'required|file',
+            'cv_form' => 'required|mimes:pdf',
             'job_id' => 'required'
         ]);
         if($validator->fails()) {
             return $this->error($validator->errors());
         }
+        $cv_formname = time() . "_" . $request->file('cv_form')->getClientOriginalName();
+        $cv_form = request()->file('cv_form')->storeAs('cv_forms', $cv_formname);
         $applicationForm = new ApplicationForm();
         $applicationForm->name = $request->name;
         $applicationForm->phone = $request->phone;
         $applicationForm->email = $request->email;
-        $applicationForm->cv_form = $request->cv_form;
+        $applicationForm->cv_form = $cv_form;
         $applicationForm->job_id = $request->job_id;
         $applicationForm->save();
         return $this->success(new ApplicationFormResource($applicationForm),"success");
@@ -111,6 +113,9 @@ class ApplicationFormController extends BaseController
         }catch (Exception $e){
             return $this->error(["message" => $e->getMessage()],404);
         }
+        $cv_formname = ApplicationForm::where('id',$id)->first()->cv_form;
+        $cv_form = storage_path('app/'.$cv_formname);
+        unlink($cv_form);
         $applicationForm->delete();
         return $this->response(null,[], 204, true);
     }
