@@ -133,6 +133,9 @@ class JobController extends BaseController
             return $this->error(["message" => $e->getMessage()],404);
         }
         $job->delete();
-        return $this->response(null,[], 204, true);
+        return response()->json([
+            "condition" => true,
+            "message" => "deleted successfully"
+        ]);
     }
 }
