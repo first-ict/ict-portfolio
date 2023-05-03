@@ -42,7 +42,7 @@ class ContentController extends BaseController
 
     public function show( $slug){
         try{
-            $content= Content::where('slug', $slug)->firstOrFail();
+            Content::where('slug', $slug)->firstOrFail();
         }catch (Exception $e){
             return $this->error(["message" => $e->getMessage()]);
         }
