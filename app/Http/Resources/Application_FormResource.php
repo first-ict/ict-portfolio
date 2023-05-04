@@ -4,8 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-
-class JobResource extends JsonResource
+class Application_FormResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,16 +16,14 @@ class JobResource extends JsonResource
     {
         return [
             'id' => $this->id,
-
-            'name' =>$this->name,
-            'post' =>$this->post,
-            'description' =>$this->description,
-            'requirement' =>$this->requirement,
-            'contact' =>$this->contact,
+            'name' => $this->name,
+            'phone' => $this->phone,
+            'email' => $this->email,
+            'cv_form' => $this->cv_form,
+            'job_id' => $this->contact,
+            'deleted_at' => $this->deleted_at,
             'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'deleted_at' => $this->deleted_at
-
+            'updated_at' => $this->updated_at
         ];
     }
 }
