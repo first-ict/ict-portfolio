@@ -5,14 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Service extends Model
+class ApplicationForm extends Model
 {
     use HasFactory;
+    Protected $guarded = [];
 
-    protected $guarded = [];
-
-    public function image()
+    public function job()
     {
-        return $this->belongsTo(File::class, 'image_id');
+        return $this->belongsTo(Job::class);
     }
 }

@@ -26,6 +26,9 @@ class ContentController extends BaseController
         if($request->image_id) {
             $content->image_id = $request->image_id;
         }
+        if($request->description) {
+            $content->description = $request->description;
+        }
         $content->user_id = rand(1 , 5);
         $content->category_id = $request->category_id;
         $content->paragraph = $request->paragraph;
@@ -39,7 +42,7 @@ class ContentController extends BaseController
 
     public function show( $slug){
         try{
-            $content= Content::where('slug', $slug)->firstOrFail();
+            Content::where('slug', $slug)->firstOrFail();
         }catch (Exception $e){
             return $this->error(["message" => $e->getMessage()]);
         }
@@ -52,6 +55,7 @@ class ContentController extends BaseController
         $validator = Validator::make($request->all(), [
             'paragraph' => 'required|string',
             'name' => 'required',
+            'category_id' => 'required'
         ]);
         if ($validator->fails()) {
             return $this->error($validator->errors(), 403);
@@ -64,8 +68,11 @@ class ContentController extends BaseController
             if($request->image_id) {
                 $content->image_id = $request->image_id;
             }
+            if($request->description) {
+                $content->description = $request->description;
+            }
             $content->user_id = rand(1 , 10);
-            $content->category_id = rand(1,10);
+            $content->category_id = $request->category_id;
             $content->slug =$slug;
             $content->update();
             return $this->success(new ContentResource($content));

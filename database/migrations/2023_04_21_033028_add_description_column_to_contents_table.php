@@ -14,7 +14,7 @@ class AddDescriptionColumnToContentsTable extends Migration
     public function up()
     {
         Schema::table('contents', function (Blueprint $table) {
-            $table->string('description')->nullable();
+            $table->text('description')->nullable();
         });
     }
 

@@ -17,14 +17,16 @@ class JobResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'post' => $this->post,
-            'description' => $this->description,
-            'requirement' => $this->requirement,
-            'contact' => $this->contact,
-            'deleted_at' => $this->deleted_at,
+
+            'name' =>$this->name,
+            'post' =>$this->post,
+            'description' =>$this->description,
+            'requirement' =>$this->requirement,
+            'contact' =>$this->contact,
             'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
+            'updated_at' => $this->updated_at,
+            'deleted_at' => $this->deleted_at
+
         ];
     }
 }

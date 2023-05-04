@@ -10,5 +10,4 @@ class File extends Model
 {
     use HasFactory;
     Protected $guarded = [];
-
 }

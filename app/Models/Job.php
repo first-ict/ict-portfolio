@@ -8,5 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Job extends Model
 {
     use HasFactory;
-    protected $guarded =[];
+
+    Protected $guarded = [];
+
+    public function applicationForms()
+    {
+        return $this->hasMany(ApplicationForm::class);
+    }
+
 }
