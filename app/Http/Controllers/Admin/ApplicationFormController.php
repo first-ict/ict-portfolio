@@ -117,6 +117,9 @@ class ApplicationFormController extends BaseController
         $cv_form = storage_path('app/'.$cv_formname);
         unlink($cv_form);
         $applicationForm->delete();
-        return $this->response(null,[], 204, true);
+        return response()->json([
+            "condition" => true,
+            "message" => "deleted . . ."
+        ]);
     }
 }
