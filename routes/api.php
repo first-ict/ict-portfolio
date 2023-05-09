@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\ContactController;
+use App\Http\Controllers\ApplicationFormController;
 use App\Http\Controllers\Frontend\HomeController;
 
 /*
@@ -41,3 +42,6 @@ Route::post('/contact-us',[ContactController::class,'store']);
 Route::get('/contact-us/{contact}',[ContactController::class,'show']);
 Route::get('/contact-us',[ContactController::class,'index']);
 Route::delete('/contact-us/{contact}',[ContactController::class,'delete']);
+Route::get('/get-jobs' , [HomeController::class , 'getJobs']);
+Route::get('/get-jobs/{job}' , [HomeController::class , 'getJob']);
+Route::post('/apply-job' , [ApplicationFormController::class , 'store']);
