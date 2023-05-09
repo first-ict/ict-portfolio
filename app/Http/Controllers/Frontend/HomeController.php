@@ -12,14 +12,16 @@ use App\Http\Resources\SliderResource;
 use App\Http\Resources\ContentResource;
 use App\Http\Controllers\BaseController;
 use App\Http\Resources\CategoryResource;
+use App\Http\Resources\JobResource;
 use App\Http\Resources\ServiceResource;
+use App\Models\Job;
 use App\Models\Service;
 
 class HomeController extends BaseController
 {
     public function getContents()
     {
-        
+
         $contents = Content::with('image')->latest()->take(4)->get();
         return $this->response("Content List", $contents);
     }
@@ -80,6 +82,21 @@ class HomeController extends BaseController
     {
         $contents = Content::latest()->where('category_id', $id)->with('image')->get();
         return $this->response("Content List", $contents);
+    }
+
+    public function getJobs()
+    {
+        return $this->success(JobResource::collection(Job::latest()->get()) , 'all jobs . . .');
+    }
+
+    public function getJob($job)
+    {
+        $data = Job::where('id' , $job)->first();
+        if ($data) {
+            return $this->success(new JobResource($data) , 'job');
+        } else {
+            return $this->error([] , 422 , 'not found');
+        }
     }
 
 }

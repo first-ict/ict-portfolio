@@ -23,7 +23,7 @@ class JobResource extends JsonResource
             'description' =>$this->description,
             'requirement' =>$this->requirement,
             'contact' =>$this->contact,
-            'created_at' => $this->created_at,
+            'created_at' => $this->created_at->format('d-m-y'),
             'updated_at' => $this->updated_at,
             'deleted_at' => $this->deleted_at
 
