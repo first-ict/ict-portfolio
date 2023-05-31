@@ -123,9 +123,7 @@ class SliderController extends BaseController
             return $this->error(['message' => $e->getMessage()], 404);
         }
         $slider->delete();
-
         return $this->success(SliderResource::collection(Slider::with('image')->paginate(10)));
-
     }
 
 }

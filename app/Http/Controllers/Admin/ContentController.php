@@ -88,6 +88,6 @@ class ContentController extends BaseController
             return $this->error(["message" => $e->getMessage()],404);
         }
         $content->delete();
-        return $this->response(null,[], 204, true);
+        return $this->success(ContentResource::collection(Content::with('image')->get()));
     }
 }
