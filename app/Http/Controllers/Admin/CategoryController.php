@@ -92,6 +92,6 @@ class CategoryController extends BaseController
             return $this->error(["message"=> $e->getMessage()], 404);
         }
         $category->delete();
-        return $this->response(null, [], 204, true);
+        return $this->success(CategoryResource::collection(Category::with('image')->get()));
     }
 }
